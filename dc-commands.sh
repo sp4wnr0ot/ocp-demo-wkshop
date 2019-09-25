@@ -16,7 +16,7 @@ oc policy add-role-to-user system:image-puller system:serviceaccount:dc-prod:def
 
 # setup dev project to load and build code
 oc project dc-dev
-oc new-app https://github.com/deversmann/openshift-workshops.git --context-dir=/dc-metro-map --image-stream=openshift/nodejs:4 --name=metro
+oc new-app https://github.com/sp4wnr0ot/openshift-workshops.git --context-dir=/dc-metro-map --image-stream=openshift/nodejs:4 --name=metro
 oc expose svc/metro
 oc rollout status dc/metro --watch
 
