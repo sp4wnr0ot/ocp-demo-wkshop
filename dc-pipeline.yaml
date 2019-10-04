@@ -12,7 +12,6 @@ spec:
     jenkinsPipelineStrategy:
       jenkinsfile: |-
         def tag,altTag
-
         pipeline {
           agent any
           stages{
@@ -38,15 +37,7 @@ spec:
                   openshift.withCluster() {
                     openshift.withProject("dc-prod") {
                       def route = openshift.selector("route", "metro-prod").object()
-                      def backends = []
-                      backends.add(route.spec.to)
-                      backends.addAll(route.spec.alternateBackends)
-                      def svc = backends.find {it.weight == 100}
-                      tag = svc.name == "metro-green" ? "blue" : "green"
-                      altTag = svc.name == "metro-green" ? "green" : "blue"
-                      openshift.tag("dc-dev/metro:latest", "dc-prod/metro:prod-${tag}")
-                      openshift.selector("dc", "metro-${tag}").rollout().latest()
-                      openshift.selector("dc", "metro-${tag}").rollout().status('--watch')
+                      openshift.tag("dc-dev/metro:latest", "dc-prod/metro:prod-blue")
                     }
                   }
                 }
@@ -69,8 +60,7 @@ spec:
                 script {
                   openshift.withCluster() {
                     openshift.withProject("dc-prod") {
-                      openshift.set("route-backends", "metro-prod", "--adjust", "metro-${tag}=100%")
-                      openshift.set("route-backends", "metro-pre-prod", "--adjust", "metro-${altTag}=100%")
+                      openshift.tag("dc-dev/metro:latest", "dc-prod/metro:prod-green")
                     }
                   }
                 }
@@ -78,11 +68,3 @@ spec:
             }
           }
         }
-    type: JenkinsPipeline
-  triggers:
-    - github:
-        secret: secret101
-      type: GitHub
-    - generic:
-        secret: secret101
-      type: Generic
