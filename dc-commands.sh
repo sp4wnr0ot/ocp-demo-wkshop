@@ -5,7 +5,7 @@ oc new-project dc-prod --display-name='Production'
 
 # populate ci/cd project with jenkins (v3.7) (and pipeline?)
 oc project dc-cicd
-oc import-image jenkins:v3.7 --from="registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.7" --confirm
+oc import-image jenkins:v3.7 --from="registry.access.redhat.com/openshift3/jenkins-2-rhel7:latest" --confirm
 oc new-app jenkins-persistent -p NAMESPACE=dc-cicd -p JENKINS_IMAGE_STREAM_TAG=jenkins:v3.7 -p MEMORY_LIMIT=1Gi
 oc create -f dc-pipeline.yaml -n dc-cicd
 
@@ -16,7 +16,7 @@ oc policy add-role-to-user system:image-puller system:serviceaccount:dc-prod:def
 
 # setup dev project to load and build code
 oc project dc-dev
-oc new-app https://github.com/sp4wnr0ot/openshift-workshops.git --context-dir=/dc-metro-map --image-stream=openshift/nodejs:4 --name=metro
+oc new-app https://github.com/sp4wnr0ot/openshift-workshops.git --context-dir=/dc-metro-map --image-stream=openshift/nodejs:latest --name=metro
 oc expose svc/metro
 oc rollout status dc/metro --watch
 
