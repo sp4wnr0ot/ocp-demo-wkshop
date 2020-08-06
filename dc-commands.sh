@@ -6,7 +6,7 @@ oc new-project dc-prod --display-name='Production'
 # populate ci/cd project with jenkins (v3.7) (and pipeline?)
 oc project dc-cicd
 oc import-image jenkins:latest --from="registry.access.redhat.com/openshift3/jenkins-2-rhel7:latest" --confirm
-oc new-app jenkins-persistent -p NAMESPACE=dc-cicd -p JENKINS_IMAGE_STREAM_TAG=jenkins:v3.7 -p MEMORY_LIMIT=1Gi
+oc new-app jenkins-persistent -p NAMESPACE=dc-cicd -p JENKINS_IMAGE_STREAM_TAG=jenkins:latest -p MEMORY_LIMIT=1Gi
 oc create -f dc-pipeline.yaml -n dc-cicd
 
 # setup permissions to allow tagging
