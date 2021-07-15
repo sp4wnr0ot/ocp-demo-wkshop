@@ -1,4 +1,4 @@
-# ocp3-demo-wkshop
+# ocp-demo-wkshop
 Demo OpenShift Blue Green Deployment
 
 Credits for my friend, Damien Eversmann
