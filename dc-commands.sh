@@ -18,6 +18,7 @@ oc policy add-role-to-user system:image-puller system:serviceaccount:dc-prod:def
 # setup dev project to load and build code
 oc project dc-dev
 oc new-app https://github.com/sp4wnr0ot/openshift-workshops.git --context-dir=/dc-metro-map --image-stream=openshift/nodejs:latest --name=metro
+# OCP4 ; oc new-app nodejs:12~https://github.com/sp4wnr0ot/openshift-workshops.git --context-dir=/dc-metro-map --name=metro
 oc expose svc/metro
 oc rollout status dc/metro --watch
 
@@ -33,7 +34,6 @@ oc new-app -i metro:prod-blue --name=metro-blue
 # remove deployment triggers
 oc set triggers dc/metro-blue --remove-all
 oc set triggers dc/metro-green --remove-all
-# OCP4 ; oc set triggers bc dc-pipeline --from-github (ocp4)
 
 # expose blue and green on prod and pre-prod urls and preset percentages
 oc expose svc/metro-green --name=metro-prod
@@ -44,3 +44,5 @@ oc set route-backends metro-pre-prod metro-blue=0 metro-green=100
 oc project dc-cicd
 oc start-build dc-pipeline --wait=true
 oc start-build dc-pipeline --list-webhooks=github
+# OCP4 ; oc set triggers bc dc-pipeline --from-github
+
